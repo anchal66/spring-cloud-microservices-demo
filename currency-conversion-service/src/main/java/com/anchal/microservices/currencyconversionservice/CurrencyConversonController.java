@@ -1,5 +1,6 @@
 package com.anchal.microservices.currencyconversionservice;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,9 @@ import java.util.HashMap;
 @RestController
 public class CurrencyConversonController {
 
+    @Autowired
+    private CurrencyExchangeProxy proxy;
+
     @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversion calcCurrency(@PathVariable String from, @PathVariable String to,
                                            @PathVariable BigDecimal quantity){
@@ -23,6 +27,21 @@ public class CurrencyConversonController {
         ResponseEntity<CurrencyConversion> responseEntity =
                 new RestTemplate().getForEntity(url, CurrencyConversion.class, uriVariables);
         CurrencyConversion currencyConversion = responseEntity.getBody();
+
+        return new CurrencyConversion(
+                currencyConversion.getId(),
+                from, to, quantity,
+                BigDecimal.ONE, BigDecimal.ONE,
+                currencyConversion.getEnvironment()
+        );
+    }
+
+    @GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
+    public CurrencyConversion calcCurrencyFeign(@PathVariable String from, @PathVariable String to,
+                                           @PathVariable BigDecimal quantity){
+
+
+        CurrencyConversion currencyConversion = proxy.retriveExchangeVal(from, to);
 
         return new CurrencyConversion(
                 currencyConversion.getId(),
