@@ -1,13 +1,10 @@
 Currency Exhannge Service:
-localhost:8000/currency-exchange/from/USD/to/INR
+http://localhost:8000/currency-exchange/from/USD/to/INR
 
-Currency conversion Service:
-localhost:8100/currency-conversion/from/USD/to/INR/quantity/10
+Currency Conversion Service:
+http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
 
+Eureka
+http://localhost:9761/
 
-crested_by
-created_date,
-modified_by,
-modified_date,
-isActive,
-isDelete
